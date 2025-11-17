@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI性格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .question h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+
+        .option.selected {
+            border-color: #2ecc71;
+            background: #d5f4e6;
+        }
+
+        .option-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .option.selected .option-letter {
+            background: #2ecc71;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        #submitBtn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #submitBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        #submitBtn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .result h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .mbti-type {
+            font-size: 3em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 20px 0;
+        }
+
+        .result-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .restart-btn {
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: #2980b9;
+        }
+
+        .progress {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MBTI性格测试</h1>
+            <p>了解真实的自己，发现职业潜能</p>
+        </div>
+
+        <div class="progress" id="progress">问题 1/4</div>
+
+        <div id="testContent">
+            <!-- 问题1 -->
+            <div class="question" id="question1">
+                <h3>1. 在社交场合中，你通常：</h3>
+                <div class="options">
+                    <div class="option" onclick="selectOption(1, 'E')">
+                        <div class="option-content">
+                            <div class="option-letter">E</div>
+                            <div>
+                                <strong>主动与他人交流</strong><br>
+                                <small>享受社交，从与人互动中获得能量</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option" onclick="selectOption(1, 'I')">
+                        <div class="option-content">
+                            <div class="option-letter">I</div>
+                            <div>
+                                <strong>更愿意观察和倾听</strong><br>
+                                <small>喜欢独处或小范围交流，在安静中恢复能量</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题2 -->
+            <div class="question" id="question2" style="display: none;">
+                <h3>2. 你更倾向于关注：</h3>
+                <div class="options">
+                    <div class="option" onclick="selectOption(2, 'S')">
+                        <div class="option-content">
+                            <div class="option-letter">S</div>
+                            <div>
+                                <strong>具体事实和细节</strong><br>
+                                <small>关注现实、实际经验和具体信息</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option" onclick="selectOption(2, 'N')">
+                        <div class="option-content">
+                            <div class="option-letter">N</div>
+                            <div>
+                                <strong>潜在可能和概念</strong><br>
+                                <small>关注模式、联系和未来可能性</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题3 -->
+            <div class="question" id="question3" style="display: none;">
+                <h3>3. 做决定时，你主要基于：</h3>
+                <div class="options">
+                    <div class="option" onclick="selectOption(3, 'T')">
+                        <div class="option-content">
+                            <div class="option-letter">T</div>
+                            <div>
+                                <strong>逻辑和客观分析</strong><br>
+                                <small>追求真理、公正，注重因果关系</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option" onclick="selectOption(3, 'F')">
+                        <div class="option-content">
+                            <div class="option-letter">F</div>
+                            <div>
+                                <strong>价值观和人际关系</strong><br>
+                                <small>考虑他人感受，追求和谐与理解</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题4 -->
+            <div class="question" id="question4" style="display: none;">
+                <h3>4. 你的生活方式更偏向：</h3>
+                <div class="options">
+                    <div class="option" onclick="selectOption(4, 'J')">
+                        <div class="option-content">
+                            <div class="option-letter">J</div>
+                            <div>
+                                <strong>有计划、有条理</strong><br>
+                                <small>喜欢做决定，享受结构和确定性</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option" onclick="selectOption(4, 'P')">
+                        <div class="option-content">
+                            <div class="option-letter">P</div>
+                            <div>
+                                <strong>灵活、随性</strong><br>
+                                <small>保持开放选择，适应变化和新信息</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button id="submitBtn" onclick="nextQuestion()" disabled>下一题</button>
+            </div>
+        </div>
+
+        <div class="result" id="result">
+            <h2>你的MBTI性格类型是</h2>
+            <div class="mbti-type" id="mbtiType"></div>
+            <div class="result-description" id="resultDescription"></div>
+            <button class="restart-btn" onclick="restartTest()">重新测试</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const userSelections = ['', '', '', ''];
+        const totalQuestions = 4;
+
+        const mbtiDescriptions = {
+            "ISTJ": "你是一个务实、有条理的人。注重细节，可靠且负责任。在需要精确性和组织能力的工作中表现出色，比如会计、项目管理或行政管理。",
+            "ISFJ": "你温暖、体贴且尽责。善于支持他人，注重和谐。适合在教育、医疗保健或服务性行业中工作，能够为他人提供实际的帮助。",
+            "INFJ": "你富有洞察力，有强烈的价值观和理想。善于理解复杂的情绪和人际关系。在咨询、心理学或创意写作等领域能够发挥天赋。",
+            "INTJ": "你是战略家，独立且具有远见。善于制定长期计划并坚持执行。在科学研究、战略规划或技术开发中能够大放异彩。",
+            "ISTP": "你灵活、务实，善于解决实际问题。喜欢动手操作，在危机中保持冷静。适合工程、技术维修或应急服务等工作。",
+            "ISFP": "你温和、敏感，具有艺术气质。注重当下的体验，价值观个人空间。在艺术设计、心理咨询或环境保护方面能找到满足感。",
+            "INFP": "你理想主义，富有创造力且忠于自己的价值观。渴望做有意义的工作。适合写作、咨询、社会服务等能够表达价值观的职业。",
+            "INTP": "你好奇心强，喜欢理论和抽象思维。善于分析复杂问题。在科学研究、哲学、或技术分析领域能够深入探索。",
+            "ESTP": "你精力充沛，善于应变，享受实际行动。在需要快速决策的环境中表现出色。适合销售、创业或体育教练等职业。",
+            "ESFP": "你热情、开朗，善于营造积极氛围。享受与人互动，活在当下。在表演艺术、活动策划或客户服务中能够发光发热。",
+            "ENFP": "你热情洋溢，有创造力，善于激励他人。看到无数可能性。适合教学、咨询、市场营销等需要创意和人际互动的工作。",
+            "ENTP": "你聪明、敏捷，善于辩论和生成新想法。喜欢智力挑战。在创业、法律或发明创造领域能够发挥才华。",
+            "ESTJ": "你高效、务实，是天生的组织者。注重效率和结果。在管理、执法或传统商业领域中能够建立秩序。",
+            "ESFJ": "你合作、和谐，关心他人的需求。善于维护团队凝聚力。适合人力资源、护理或社区服务等需要人际技巧的工作。",
+            "ENFJ": "你有魅力、有同理心，是天生的导师。善于帮助他人成长。在教育、领导职位或心理咨询中能够发挥影响力。",
+            "ENTJ": "你果断、战略性强，是天生的领导者。善于组织人和资源。在企业高管、政治或战略咨询中能够实现宏伟目标。"
+        };
+
+        function selectOption(questionNum, type) {
+            userSelections[questionNum-1] = type;
+            
+            // 更新选中状态
+            const questionElement = document.getElementById(`question${questionNum}`);
+            const options = questionElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            event.currentTarget.classList.add('selected');
+            
+            // 启用按钮
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                // 隐藏当前问题，显示下一个问题
+                document.getElementById(`question${currentQuestion}`).style.display = 'none';
+                currentQuestion++;
+                document.getElementById(`question${currentQuestion}`).style.display = 'block';
+                document.getElementById('progress').textContent = `问题 ${currentQuestion}/${totalQuestions}`;
+                
+                // 禁用按钮直到选择答案
+                document.getElementById('submitBtn').disabled = true;
+                
+                if (currentQuestion === totalQuestions) {
+                    document.getElementById('submitBtn').textContent = '查看结果';
+                }
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            const mbtiType = userSelections.join('');
+            document.getElementById('mbtiType').textContent = mbtiType;
+            document.getElementById('resultDescription').textContent = mbtiDescriptions[mbtiType] || "这是一个独特的性格组合！";
+            
+            document.getElementById('testContent').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function restartTest() {
+            currentQuestion = 1;
+            userSelections.fill('');
+            
+            // 重置所有问题显示
+            for (let i = 1; i <= totalQuestions; i++) {
+                const question = document.getElementById(`question${i}`);
+                question.style.display = i === 1 ? 'block' : 'none';
+                const options = question.querySelectorAll('.option');
+                options.forEach(opt => opt.classList.remove('selected'));
+            }
+            
+            document.getElementById('progress').textContent = '问题 1/4';
+            document.getElementById('submitBtn').textContent = '下一题';
+            document.getElementById('submitBtn').disabled = true;
+            
+            document.getElementById('testContent').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
